@@ -1,0 +1,75 @@
+{% extends "base2.html" %}
+
+{% block title %}
+<title>文本分析</title> 
+{% endblock%}
+
+{% block js %}
+<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+<script type="text/javascript">
+	$(window).ready(function(){
+		var vue1 = new Vue({
+			el: "#cnt",//对id=cnt进行操作
+			data: {
+				message: "",
+				dis: [],
+			},
+			methods: {
+				transfer: function(){
+					$.ajax({
+						url: 'http://localhost:8000/transfer2?msg='+this.message,
+						type: 'POST',
+						dataType: 'text',
+						headers:{"X-CSRFToken":$.cookie('csrftoken')},
+						data: {
+						}, 
+						success: function(data){
+							var test = JSON.parse(data)
+							vue1.dis = test
+						},
+						error: function(data){
+							alert('错误'+data.status)
+						}
+					})
+				}
+			}
+		})
+	})
+</script>
+{% endblock %}
+		<div class="nav-primary">
+			<div class="nav-log">
+				<a href="/transfer"><b>文本分析</b></a>
+			</div>
+
+{% block content %}
+<div id='cnt'>
+<div class="nav" id="nav">
+	<div class="nav-wrap">
+			<div class="nav-search"> 
+				<iframe name='forsubmit' style='display: none;'></iframe>
+				<form target="forsubmit">  <!--target规定在什么地方打开该网页-->
+					<div class="inp">
+						<input id='inpmsg' v-model="message" type="text" name="" size="22" maxlength="60" placeholder="输入文本地址">
+					</div>
+					<div id="transfer" class="inp-btn">
+						<input @click='transfer' type="submit" name="" value="转换">
+					</div>
+				</form>
+				<div class="clear-float"></div>
+			</div>
+			<div class="clear-float"></div>
+		</div>
+	</div> 
+</div>
+<div class="wrap">
+	<svg class='forsvg' xmlns="http://www.w3.org/2000/svg" version="1.1" height="1000px" width="1000px">
+		<g v-for='item in dis' stroke="black" stroke-width="3" fill="black">
+			<path :d="item.d" stroke="red" stroke-width="3" fill="none" />
+    		<circle :cx="item.xs" :cy="item.ys" r="3" />
+    		<circle :cx="item.xe" :cy="item.ye" r="3" />
+  		</g>
+	</svg>
+</div>
+</div>
+{% endblock %}

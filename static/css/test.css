@@ -1,0 +1,163 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+	text-decoration: none;
+	color:"#000000";
+}
+
+fieldset {
+	border: 0;
+}
+/* base.html css */
+.top-nav {
+	background-color: #545652;
+	width: 100%;
+	height:40px;
+	color: #d5d5d5;
+	min-width: 950px;
+	font: 15px Helvetica,Arial,sans-serif;
+	position: relative;
+	clear: both;
+	overflow: auto;
+}
+
+.top-nav-info {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.top-nav ul li{
+	list-style: none;
+	float: left;
+	margin-left: 30px;
+	display: list-item;
+}
+
+.top-nav ul li a {
+	color: #d5d5d5;        
+	text-decoration: none;
+	text-align: center;
+	line-height: 40px;
+}
+
+.top-nav ul li a:hover {
+	color: white;
+}
+
+/*
+.show-height {
+	overflow: hidden;
+	margin: 0 auto;
+}  */
+
+.foot-nav {
+	width: 950px;
+	margin: 0 auto 40px;
+	border-top: 1px dashed #ddd;
+	padding-top: 6px;
+}
+
+.foot-nav-text {
+	color: #999;
+	font-size: 12px;
+}
+
+
+/* home.html css */
+.nav {
+	width: 100%;
+	background-color: #f0f3f5;
+	margin-bottom: 40px;
+	overflow: hidden;
+}
+
+.nav-wrap {
+	width: 950px;
+	height: 100%;
+	margin: 0 auto;
+	border-bottom: 1px solid #e3ebec; 
+	overflow: hidden;
+}
+
+.nav-primary {
+	padding: 10px 0 20px;ß
+}
+
+.nav-log {
+	margin-right: 13px;
+	float: left;
+}
+
+.nav-log a {
+	font:12px Helvetica,Arial,sans-serif;
+	font-size: 27px;
+	color: #27a;
+}
+
+.nav-search {
+	width: 800px;
+	float: left;
+}
+
+.inp {
+	padding-top: 7px;
+	width: 470px;
+	height: 34px;
+	float: left;
+}
+
+.inp input {
+	line-height: 30px;
+	padding-left: 10px;
+	border-radius: 3px;
+	border-style: none;
+	border-color: white;
+	width: 98%;
+	vertical-align: middle;
+}
+
+.inp input:focus {
+	outline: none;
+}
+
+.inp-btn input{
+	width: 40px;
+	height: 30px;
+	margin-top: 7px;
+	border-radius: 0   3px 3px 0;
+	border-style: none;
+	background-color: #9099A1;
+	color: white;
+	float: left;
+}
+
+.inp-btn input:focus {
+	outline: none;
+}
+
+.inp-btn input:active {
+	background-color: red;
+}
+
+
+.clear-float {
+	clear: both;
+}
+
+/*  wrap */
+.wrap {
+	width: 1040px;
+	margin: 0 auto 40px;
+	border: solid 1px black;
+}
+
+
+.file-download {
+	width: 950px;
+	min-height: 400px;
+	margin: 0 auto;
+}

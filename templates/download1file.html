@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>下载</title> 
+{% endblock%}
+
+{% block js %}
+<script type="text/javascript">
+	window.onload = function() {
+
+		function getQueryString(name) { 
+	  		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); 
+	  		var r = window.location.search.substr(1).match(reg); 
+	  		if (r != null) return decodeURI(r[2]); return null; 
+		}
+		filename = getQueryString("filename");
+		document.getElementById("afile").innerHTML = filename;
+		document.getElementById("afile").href = "/download-file?filename="+filename
+	}
+</script>
+{% endblock js%}
+
+{% block content %}
+<div id='cnt'>
+<div class="nav" id="nav">
+	<div class="nav-wrap">
+		<div class="nav-primary">
+			<div class="nav-log">
+				<a><b>文本下载</b></a>
+			</div>
+		</div>
+	</div> 
+</div>
+<div id="file" class="file-download">
+	<a href="" id="afile" style="color: black"></a>
+</div>
+</div>
+
+{% endblock %}

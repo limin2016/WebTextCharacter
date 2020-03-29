@@ -1,0 +1,8 @@
+1,admin,logentry
+3,auth,group
+2,auth,permission
+4,auth,user
+5,contenttypes,contenttype
+7,HanziModel,hanzi
+8,HanziModel,zywthz
+6,sessions,session

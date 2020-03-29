@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>hello</title>
+	<link rel="stylesheet" type="text/css" href="static/css/test.css">
+    <!-- <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+ -->
+ 	<script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+</head>
+
+
+<body>
+{% csrf_token %}
+{% verbatim myblock %}
+	<div id="vv">
+		<div>
+			<div>
+				<p id="ttt">输入秘密信息：</p>
+			</div>
+			<div class="nav-search">
+				<iframe name='forsubmit' style='display: none;'></iframe>
+				<form target="forsubmit">
+					<div class="inp">
+						<input id='inpmsg' v-model="message" type="text" name="" size="22" maxlength="60" placeholder="多行文本输入……">
+					</div>
+					<div id="transform" class="inp-btn">
+						<input @click='transform' type ="submit" name="" value="转换">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="wrap">
+			<svg class='forsvg' xmlns="http://www.w3.org/2000/svg" version="1.1" height="1000px" width="1000px">
+                <g  v-for='item in tests' stroke="black" stroke-width="3" fill="black">
+				    <path :d="item.d" stroke="pink" stroke-width="3" fill="none" />
+				    <circle :cx="item.xs" :cy="item.ys" r="3" />
+				    <circle :cx="item.xe" :cy="item.ye" r="3" />
+			    </g>
+			    <g v-for='item in dis' stroke="black" stroke-width="3" fill="black">
+				    <path :d="item.d" stroke="blue" stroke-width="3" fill="none" />
+				    <circle :cx="item.xs" :cy="item.ys" r="3" />
+				    <circle :cx="item.xe" :cy="item.ye" r="3" />
+			    </g>}
+                <g v-for='item in ccl' stroke="black" stroke-width="3" fill="black">
+                    <circle :cx="item.xe" :cy="item.ye" r="3" @click='cc(item.alt)'/>
+                </g>
+			</svg>
+		</div>
+	</div>
+{% endverbatim myblock %}
+	
+	<script type="text/javascript">
+		
+		var vm = new Vue({
+			el: '#vv',
+			data:
+				{
+					message:'',
+                    dis:[],
+                    tests:[],
+                    ccl:[],
+				},
+			methods:
+				{
+					transform:function()
+					{
+					    $.ajax({
+							url: '/transform?msg='+this.message,
+							type: 'POST',
+							dataType: 'text',
+							headers:{"X-CSRFToken":$.cookie('csrftoken')},
+							data: {
+							},
+							success: function(data){
+								var test = JSON.parse(data)
+								vm.dis = test
+							},
+							error: function(data){
+								alert('错误'+data.status)
+							}
+						})
+					},
+                    cc:function (cm)
+                    {
+                        alert("载体文章路径为"+cm)
+                    }
+				}
+			})
+        $.ajax({
+            url: '/tree',
+            type: 'POST',
+            dataType: 'text',
+            headers:{"X-CSRFToken":$.cookie('csrftoken')},
+            data: {
+            },
+            success: function(data){
+                var test = JSON.parse(data)
+                vm.tests = test
+            },
+            error: function(data){
+                alert('错误'+data.status)
+            }
+        });
+		$.ajax({
+            url: '/click',
+            type: 'POST',
+            dataType: 'text',
+            headers:{"X-CSRFToken":$.cookie('csrftoken')},
+            data: {
+            },
+            success: function(data){
+                var test = JSON.parse(data)
+                vm.ccl = test
+            },
+            error: function(data){
+                alert('错误'+data.status)
+            }
+        });
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>文本分析</title> 
+{% endblock%}
+
+{% block js %}
+
+<script type="text/javascript">
+	window.onload = function(){
+		//数据转换
+	function transData(a, idStr, pidStr, childrenStr) {
+		var r = [], hash = {}, id = idStr, pid = pidStr, children = childrenStr, i = 0, j = 0, len = a.length;
+		for (; i < len; i++) { 
+			hash[a[i][id]] = a[i];
+		}
+		for (; j < len; j++) {
+			var aVal = a[j], hashVP = hash[aVal[pid]];
+			if (hashVP) {
+				!hashVP[children] && (hashVP[children] = []);
+				hashVP[children].push(aVal);
+			} else {
+				r.push(aVal);
+			}
+		}
+		return r;
+	}
+ 
+/**
+ *3. 画树
+ */function drawTree(treeData) {
+	var  myChart = echarts.init(document.getElementById("main"));//div元素节点的对象
+	myChart.clear();
+	myChart.setOption({
+		tooltip : {
+			trigger : 'item',
+			triggerOn : 'mousemove'
+		},
+		series : [ {
+			type : 'tree',
+			name : 'TREE_ECHARTS',
+			data : treeData,
+			top : '2%',
+			left : '5%',
+			bottom : '2%',
+			right : '0%',
+			symbolSize : 7,
+			orient: 'vertical',
+			label : {
+				normal : {
+					position : 'left',
+					verticalAlign : 'middle',
+					align : 'right'
+				}
+			},
+			leaves : {
+				label : {
+					position : 'right',
+					verticalAlign : 'middle',
+					align : 'left'
+				}
+			},
+			expandAndCollapse : false , //true时，点击节点会收缩
+			initialTreeDepth :  10 //展示层级数
+		} ]
+	});
+	//4.树绑定事件
+	 myChart.on('click', function(params) {
+		// var name = params.data.name;//点击的节点的name
+		// var value = params.data.value;//点击的节点的value
+		// //调用点击事件
+  //   	clickNode(name,value);
+  		var filename  = params.data.passageName;
+  		window.location.href="/download1file?filename="+filename;
+	}); 
+}
+
+
+var passageData;
+var treeData;
+$.ajax({
+	url: '/unify-passage', 
+	type: 'POST',
+	dataType: 'text',
+	headers:{"X-CSRFToken":$.cookie('csrftoken')},
+	data: {
+	}, 
+	success:  function(data){
+		var test = JSON.parse(data)
+		treeData = transData(test, "value1", "sj", "children");
+		//passageData = treeData.concat();
+		drawTree(treeData);
+	},
+	error: function(data){
+		alert('错误'+data.status)
+	}
+});
+
+
+		var vue1 = new Vue({
+			el: "#cnt",
+			data: {
+				message: "",
+				dis: [],
+			},
+			methods: {
+				transfer: function(){
+					$.ajax({
+						url: 'http://localhost:8000/transfer?msg='+this.message, 
+						type: 'POST',
+						dataType: 'text',
+						headers:{"X-CSRFToken":$.cookie('csrftoken')},
+						data: { 
+						}, 
+						success:  function(data){
+							var test = JSON.parse(data)
+							var code = test[0].code
+							var len = code.length
+							//treeData = [{name:"ok", children:[]}]
+							$.ajax({
+								url: '/unify-passage', 
+								type: 'POST',
+								dataType: 'text',
+								headers:{"X-CSRFToken":$.cookie('csrftoken')},
+								data: {
+								}, 
+								success:  function(data){
+									var test = JSON.parse(data)
+									treeData = transData(test, "value1", "sj", "children");
+								},
+								error: function(data){
+									alert('错误'+data.status)
+								}
+							});
+							//treeData = passageData.concat();
+							var temp = treeData[0];
+							for(var i=0; i<len; i++) {
+								temp.children[code[i]].itemStyle = {
+									color:"blue",
+									borderColor:"blue" 
+								};
+								temp.children[code[i]].lineStyle = {
+									color: "blue",
+									borderColor: "blue",
+								}
+								temp = temp.children[code[i]]
+							}
+							// var treeData = transData(test, "value1", "sj", "children");
+							drawTree(treeData);
+						},
+						error: function(data){
+							alert('错误'+data.status)
+						}
+					})
+				}
+			}
+		})
+	} 
+</script>
+{% endblock %}
+
+{% block content %}
+<div id='cnt'>
+<div class="nav" id="nav">
+	<div class="nav-wrap">
+		<div class="nav-primary">
+			<div class="nav-log">
+				<a href="/transfer"><b>秘密消息</b></a>
+			</div>
+			<div class="nav-search"> 
+				<form onsubmit="return false">
+					{% csrf_token%} 
+					<div class="inp">
+						<input id='inpmsg' v-model="message" type="text" name="" size="22" maxlength="60" placeholder="请输入要转化的秘密消息">
+					</div>
+					<div id="transfer" class="inp-btn">
+						<input @click='transfer' type="submit" name="" value="转换">
+					</div>
+				</form>
+				<div class="clear-float"></div>
+			</div>
+			<div class="clear-float"></div>
+		</div>
+	</div> 
+</div>
+
+<div id="main" style="width: 1200px;height:400px;">
+</div>
+<!-- <div class="wrap">
+	<svg class='forsvg' xmlns="http://www.w3.org/2000/svg" version="1.1" height="1000px" width="1000px">
+		<g v-for='item in dis' stroke="black" stroke-width="3" fill="black">
+			<path :d="item.d" stroke="red" stroke-width="3" fill="none" />
+    		<circle :cx="item.xs" :cy="item.ys" r="3" />
+    		<circle :cx="item.xe" :cy="item.ye" r="3" />
+  		</g>
+	</svg>
+</div> -->
+</div>
+{% endblock %}

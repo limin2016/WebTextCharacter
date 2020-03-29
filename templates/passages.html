@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>文本库</title> 
+{% endblock%}
+
+{% block js %}
+<script type="text/javascript">
+	window.onload = function() {
+		var vue = new Vue({
+			el: "#cnt",
+			data: {
+				passages:[],
+			},
+			methods: {
+			}
+		});
+
+		$.ajax({
+			url: '/get-file-name', 
+			type: 'POST',
+			dataType: 'text',
+			headers:{"X-CSRFToken":$.cookie('csrftoken')},
+			data: {
+			}, 
+			success:  function(data){
+				var test = JSON.parse(data)
+				vue.passages = test
+			},
+			error: function(data){
+				alert('错误'+data.status)
+			}
+		});
+
+	}
+</script>
+{% endblock js%}
+
+{% block content %}
+<div id='cnt'>
+	{% csrf_token %}
+	{% verbatim %}
+	<div class="nav" id="nav">
+		<div class="nav-wrap">
+			<div class="nav-primary">
+				<div class="nav-log">
+					<a><b>文本下载</b></a>
+				</div>
+			</div>
+		</div> 
+	</div>
+	<div id="file" class="file-download">
+		<ul>
+			<li v-for='item in passages'>
+				<a :href="item.href" style="color: black"> {{ item.filename }}</a>
+			</li>
+		</ul>
+	</div>
+	{% endverbatim %}
+</div>
+
+{% endblock %}

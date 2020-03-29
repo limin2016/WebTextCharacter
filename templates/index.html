@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <title>展示页面</title>
+</head>
+<body>
+{% load static %}
+<div id="con">
+    <div class="sub">
+        <form target="forsubmit">
+            {% csrf_token %}
+            <div id="navi">
+                <img src="{% static "logo.svg" %}" height="266" width="284" style="margin:0 auto" />
+                <div>
+                    <input id='inpmsg' v-model="message" type="text" name="" placeholder="请输入秘密消息">
+                    <input @click='transfer' id="transfer" type="button" name="" value="隐藏">
+                </div>
+            </div>
+        </form>
+        <div class="clear-float"></div>
+    </div>
+
+    <div id="tree" style="margin:0 auto">
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="15000" width="1000px">
+		<g v-for='item in resdir' stroke="black" stroke-width="8" fill="black">
+			<path :d="item.d" stroke="saddlebrown" stroke-width="10" fill="none" />
+    		<circle :cx="item.xs" :cy="item.ys" r="8" stroke="green" fill="green"/>
+    		<circle :cx="item.xe" :cy="item.ye" r="8" stroke="green" fill="green"/>
+  		</g>
+	</svg>
+    </div>
+</div>
+
+<style type="text/css">
+    body{
+        margin: 0px;
+        padding: 0px;
+        background-color: white;
+    }
+    .sub{
+        padding: 5px;
+        font-size: 80px;
+    }
+    #navi{
+     
+        font-size: 50px;
+        width: 1040px;
+        margin: 0 auto 40px;
+    }
+    #inpmsg{
+        width: 400px;
+        height: 50px;
+        padding-left: 30px;
+        padding-bottom: 5px;
+        padding-top: 5px;
+        position: relative;
+        bottom: 10px;
+        border-radius: 50px;
+    }
+    #transfer{
+        width: 150px;
+        height: 80px;
+        font-size: 45px;
+        position: relative;
+        bottom: 8px;
+        padding: 6px;
+        border-radius: 50px;
+        background-color: gold;
+    }
+    #tree{
+        height: auto;
+        width: 1000px;
+    }
+</style>
+
+<script>
+    var vue1 = new Vue({
+        el: '#con',
+        data: {
+            message: "",
+            resdir: []
+        },
+        methods: {
+				transfer: function(){
+					$.ajax ({
+						url: '/lvzheqing/?msg='+this.message,
+						type: 'POST',
+						dataType: 'text',
+						headers:{"X-CSRFToken":$.cookie('csrftoken')},
+						data: {
+						},
+						    //alert('ok')
+						success: function(data){
+							var test = JSON.parse(data)
+							vue1.resdir = test
+
+						},
+						error: function(data){
+							alert('错误'+data.status)
+						}
+					})
+				}
+			}
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="static/css/test.css">
+	<script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="static/js/vue.min.js"></script>
+	<script type="text/javascript" src="static/js/echarts.js"></script>
+	<script src="https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+	{% block title %}
+	{% endblock %}
+	{% block js %}
+	{% endblock %}
+</head>
+<body>
+	<div id="top-nav" class="top-nav">
+		<div class="top-nav-info">
+			<div class="show-height">
+				<ul class="show-height">
+					<li>
+						<a href="/" target='_blank'>文本分析</a>
+					</li>
+					<li>
+						<a href="/download-all-files" target='_blank'>文本库</a>
+					</li>
+					<li>
+						<a href="/index" target="_blank">数据管理</a>
+					</li>
+					<li>
+						<a href="/index" target="_blank">笔顺</a>
+					</li>
+					<li>
+						<a href="/jiouxing" target="_blank">汉字奇偶性</a>
+					</li>
+					<li>
+						<a href="/index2" target="_blank">汉字结构</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+{% block content %}
+{% endblock %}
+<!-- 底部导航栏 -->
+	<div class="foot-nav">
+		<span class="foot-nav-text">
+    	网络文本分析
+		</span>
+	</div>
+</body>
+{% block endjs %}
+{% endblock %}
+</html>
